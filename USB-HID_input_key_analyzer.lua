@@ -88,7 +88,10 @@ function analysis()
                 if tonumber("0x" .. tostring(tvb:bytes(27, 1))) == 0x00 then
                     pressed_key = pressed_key .. KEY_CODE[tonumber("0x" .. tostring(tvb:bytes(29, 1)))][1]
                 end
-                if tonumber("0x" .. tostring(tvb:bytes(27, 1))) == 0x02 then
+
+                -- 0x02: Left-Shift
+                -- 0x20: Right-Shift
+                if tonumber("0x" .. tostring(tvb:bytes(27, 1))) == 0x02 or tonumber("0x" .. tostring(tvb:bytes(27, 1))) == 0x20 then
                     pressed_key = pressed_key .. KEY_CODE[tonumber("0x" .. tostring(tvb:bytes(29, 1)))][2]
                     shift_flag = true
                 end
