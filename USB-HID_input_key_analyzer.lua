@@ -81,16 +81,20 @@ function analysis()
 
     win:set_atclose(remove_tap)
 
+    local shift_flag = false
     function tap.packet(pinfo, tvb, tapinfo)
-        if tvb:len() == 35 and tonumber("0x" .. tostring(tvb:bytes(22, 1))) == 0x01 then
+        if tvb:len() == 35 and tonumber("0x" .. tostring(tvb:bytes(22, 1))) == 0x01 and shift_flag == false then
             if KEY_CODE[tonumber("0x" .. tostring(tvb:bytes(29, 1)))] ~= nil then
                 if tonumber("0x" .. tostring(tvb:bytes(27, 1))) == 0x00 then
                     pressed_key = pressed_key .. KEY_CODE[tonumber("0x" .. tostring(tvb:bytes(29, 1)))][1]
                 end
                 if tonumber("0x" .. tostring(tvb:bytes(27, 1))) == 0x02 then
                     pressed_key = pressed_key .. KEY_CODE[tonumber("0x" .. tostring(tvb:bytes(29, 1)))][2]
+                    shift_flag = true
                 end
             end
+        else
+            shift_flag = false
         end
     end
 
